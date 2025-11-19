@@ -1,6 +1,6 @@
-from collections.abc import Sequence
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from typing import Sequence
 import numpy as np
 import hdbscan
 

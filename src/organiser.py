@@ -5,11 +5,11 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence
+from typing import List, Optional
 
 import requests
 
-from commons import Feed, Quote, User
+from commons import Quote, User
 
 
 @dataclass(frozen=True)
