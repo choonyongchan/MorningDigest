@@ -1,7 +1,2 @@
-plugins:
-  - jekyll-relative-links
-relative_links:
-  enabled: true
-  collections: true
 include:
   - output/morning_digest_singapore.md
