@@ -1,4 +1,3 @@
-from datetime import datetime, timezone
 from types import SimpleNamespace
 
 import organiser as organiser_module
@@ -17,18 +16,12 @@ class DummyQuoteResponse:
 
 
 def test_headlines_html_formats_items():
-    now = datetime(2024, 1, 1, 8, 0, tzinfo=timezone.utc)
-    headline = Headline(
-        title="Markets rally",
-        summary="Stocks inch higher on optimism.",
-        feed_name="Sample Feed",
-        published_at=now,
-    )
+    headline = Headline(title="Markets rally", url="https://example.com/markets-rally")
 
     html = Organiser.build_headlines([headline])
 
     assert "Markets rally" in html
-    assert "Sample Feed" not in html  # Feed name not shown in current implementation
+    assert "https://example.com/markets-rally" in html
     assert "<li>" in html
 
 

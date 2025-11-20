@@ -30,6 +30,7 @@ def test_summary_to_digest_flow(tmp_path, monkeypatch):
         article=[
             Article(
                 title="Integration story",
+                url="https://example.com/integration/story",
                 summary="Integration details",
                 published="Mon, 01 Jan 2024 00:00:00 GMT",
             )
@@ -40,6 +41,7 @@ def test_summary_to_digest_flow(tmp_path, monkeypatch):
     summariser = summariser_module.Summariser(model="mock")
     summariser.invoke_model = lambda instructions, prompt: "Integrated summary"  # type: ignore[assignment]
     summariser.summarise([user])
+    user.top_articles = feed.article
 
     def fake_get(*_args, **_kwargs):
         return DummyQuoteResponse()

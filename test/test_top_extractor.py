@@ -100,17 +100,13 @@ def test_cluster_medoids_returns_cluster_representatives():
 
     labels = np.array([0, 0, 0, 1, 1, 1, -1])
 
-    medoid_headlines, medoid_embeddings = TopExtractor.cluster_medoids(headlines, embeddings, labels)
+    medoid_headlines = TopExtractor.cluster_medoids(headlines, embeddings, labels)
 
     expected_headlines = {"Markets surge worldwide", "Championship parade scheduled"}
     assert set(medoid_headlines) == expected_headlines
 
-    medoid_lookup = {headline: emb for headline, emb in zip(medoid_headlines, medoid_embeddings)}
-    np.testing.assert_allclose(medoid_lookup["Markets surge worldwide"], embeddings[1])
-    np.testing.assert_allclose(medoid_lookup["Championship parade scheduled"], embeddings[4])
 
-
-def test_pick_top_headlines_runs_pipeline(monkeypatch):
+def test_pick_top_articles_runs_pipeline(monkeypatch):
     headlines = [
         "Headline A",
         "Headline B",
@@ -121,9 +117,15 @@ def test_pick_top_headlines_runs_pipeline(monkeypatch):
 
     captured_calls = {}
 
+    medoid_embeddings = np.array([[1.0, 0.0]])
+
     def fake_embed(texts):
-        captured_calls["embed_texts"] = texts
-        return fake_embeddings
+        captured_calls.setdefault("embed_texts", []).append(list(texts))
+        if texts == headlines:
+            return fake_embeddings
+        if list(texts) == ["Headline B"]:
+            return medoid_embeddings
+        raise AssertionError("Unexpected embed input")
 
     def fake_cluster_headlines(embeddings, min_cluster_size=4):
         captured_calls["cluster_headlines_input"] = embeddings
@@ -131,11 +133,11 @@ def test_pick_top_headlines_runs_pipeline(monkeypatch):
 
     def fake_cluster_medoids(headlines_arg, embeddings_arg, labels_arg):
         captured_calls["cluster_medoids_args"] = (headlines_arg, embeddings_arg, labels_arg)
-        return ["Cluster rep"], np.array([[1.0, 0.0]])
+        return ["Headline B"]
 
     def fake_mmr_select(candidates, embeddings, top_n=TopExtractor.TOP_N, lambda_param=1.0):
         captured_calls["mmr_args"] = (candidates, embeddings, top_n, lambda_param)
-        return ["Cluster rep"]
+        return list(candidates)
 
     monkeypatch.setattr(TopExtractor, "embed", staticmethod(fake_embed))
     monkeypatch.setattr(TopExtractor, "cluster_headlines", staticmethod(fake_cluster_headlines))
@@ -144,16 +146,21 @@ def test_pick_top_headlines_runs_pipeline(monkeypatch):
 
     user = SimpleNamespace(
         selected_feeds=[
-            SimpleNamespace(article=[SimpleNamespace(title="Headline A"), SimpleNamespace(title="Headline B")]),
-            SimpleNamespace(article=[SimpleNamespace(title="Headline C")]),
+            SimpleNamespace(
+                article=[
+                    SimpleNamespace(title="Headline A", url="https://example.com/a"),
+                    SimpleNamespace(title="Headline B", url="https://example.com/b"),
+                ]
+            ),
+            SimpleNamespace(article=[SimpleNamespace(title="Headline C", url="https://example.com/c")]),
         ],
-        top_headlines=None,
+        top_articles=None,
     )
 
-    TopExtractor.pick_top_headlines(user)
+    TopExtractor.pick_top_articles([user])
 
-    assert user.top_headlines == ["Cluster rep"]
-    assert captured_calls["embed_texts"] == headlines
+    assert [article.title for article in user.top_articles] == ["Headline B"]
+    assert captured_calls["embed_texts"][0] == headlines
     np.testing.assert_array_equal(captured_calls["cluster_headlines_input"], fake_embeddings)
 
     ch_headlines, ch_embeddings, ch_labels = captured_calls["cluster_medoids_args"]
@@ -162,7 +169,7 @@ def test_pick_top_headlines_runs_pipeline(monkeypatch):
     np.testing.assert_array_equal(ch_labels, fake_labels)
 
     candidates, candidate_embeddings, top_n, lambda_param = captured_calls["mmr_args"]
-    assert candidates == ["Cluster rep"]
-    np.testing.assert_array_equal(candidate_embeddings, np.array([[1.0, 0.0]]))
+    assert candidates == ["Headline B"]
+    np.testing.assert_array_equal(candidate_embeddings, medoid_embeddings)
     assert top_n == TopExtractor.TOP_N
     assert lambda_param == 1.0

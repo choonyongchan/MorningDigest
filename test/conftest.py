@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 from types import SimpleNamespace
 import types
+from importlib.machinery import ModuleSpec
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SRC_PATH = PROJECT_ROOT / "src"
@@ -17,6 +18,7 @@ if "openai" not in sys.modules:
             self.responses = SimpleNamespace(create=_dummy_create)
 
     dummy_module = types.ModuleType("openai")
+    dummy_module.__spec__ = ModuleSpec(name="openai", loader=None)
     dummy_module.OpenAI = _DummyClient
     sys.modules["openai"] = dummy_module
 
@@ -33,6 +35,7 @@ def sample_feed() -> Feed:
         article=[
             Article(
                 title="Sample Story",
+                url="https://example.com/articles/sample-story",
                 published="Mon, 01 Jan 2024 08:00:00 GMT",
                 summary="Sample summary",
             )
@@ -47,4 +50,5 @@ def sample_user(sample_feed: Feed) -> User:
         name="Jane Doe",
         selected_feeds=[sample_feed],
         summary="Sample personalised summary.",
+        top_articles=sample_feed.article,
     )

@@ -24,7 +24,7 @@ def test_digest_app_run_executes_pipeline(monkeypatch, tmp_path):
                 name="Sample Feed",
                 tags=["sample"],
                 url="https://example.com/feed",
-                article=[Article(title="Story", summary="Summary")],
+                article=[Article(title="Story", url="https://example.com/story", summary="Summary")],
             )
             user = User(username="default_user", name="Morning Reader", selected_feeds=[feed], summary="")
             return [user]
@@ -52,10 +52,20 @@ def test_digest_app_run_executes_pipeline(monkeypatch, tmp_path):
         def build(user, output_file):
             built_users.append((user.username, user.summary, output_file))
 
+    class FakeTopExtractor:
+        def pick_top_articles(self, users):
+            for user in users:
+                articles = []
+                for feed in user.selected_feeds:
+                    if feed.article:
+                        articles.extend(feed.article)
+                user.top_articles = articles
+
     monkeypatch.setattr(main_module, "Database", FakeDatabase)
     monkeypatch.setattr(main_module, "Ingester", FakeIngester)
     monkeypatch.setattr(main_module, "Summariser", FakeSummariser)
     monkeypatch.setattr(main_module, "Organiser", FakeOrganiser)
+    monkeypatch.setattr(main_module, "TopExtractor", FakeTopExtractor)
 
     app = main_module.DigestApp()
     app.parser.parse_args = lambda _argv: SimpleNamespace(output=str(tmp_path / "digest.md"))

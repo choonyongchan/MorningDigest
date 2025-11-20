@@ -59,11 +59,13 @@ def test_filter_today_articles_respects_allowed_dates(monkeypatch):
 
     allowed_article = Article(
         title="Fresh",
+        url="https://example.com/fresh",
         published=allowed_dt.strftime("%a, %d %b %Y %H:%M:%S GMT"),
         summary="Allowed",
     )
     old_article = Article(
         title="Stale",
+        url="https://example.com/stale",
         published="Mon, 01 Jan 2024 08:00:00 GMT",
         summary="Ignore",
     )

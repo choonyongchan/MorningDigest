@@ -22,8 +22,18 @@ def test_feed_to_str_serialises_articles():
         tags=["sample"],
         url="https://example.com/feed",
         article=[
-            Article(title="Story", summary="Brief", published="Mon, 01 Jan 2024 00:00:00 GMT"),
-            Article(title="Another", summary="Details", published="Mon, 01 Jan 2024 00:00:00 GMT"),
+            Article(
+                title="Story",
+                url="https://example.com/story",
+                summary="Brief",
+                published="Mon, 01 Jan 2024 00:00:00 GMT",
+            ),
+            Article(
+                title="Another",
+                url="https://example.com/another",
+                summary="Details",
+                published="Mon, 01 Jan 2024 00:00:00 GMT",
+            ),
         ],
     )
 

@@ -18,6 +18,7 @@ class MemoryDatabase:
             article=[
                 Article(
                     title="E2E story",
+                    url="https://example.com/e2e/story",
                     summary="E2E summary",
                     published="Mon, 01 Jan 2024 00:00:00 GMT",
                 )
@@ -51,6 +52,16 @@ class StubSummariser:
             user.summary = "E2E generated summary"
 
 
+class StubTopExtractor:
+    def pick_top_articles(self, users):
+        for user in users:
+            articles = []
+            for feed in user.selected_feeds:
+                if feed.article:
+                    articles.extend(feed.article)
+            user.top_articles = articles
+
+
 class DummyQuoteResponse:
     def raise_for_status(self):  # pragma: no cover - no network in tests
         return None
@@ -63,6 +74,7 @@ def test_cli_end_to_end(monkeypatch, tmp_path):
     monkeypatch.setattr(main_module, "Database", MemoryDatabase)
     monkeypatch.setattr(main_module, "Ingester", StubIngester)
     monkeypatch.setattr(main_module, "Summariser", StubSummariser)
+    monkeypatch.setattr(main_module, "TopExtractor", StubTopExtractor)
 
     def fake_get(*_args, **_kwargs):
         return DummyQuoteResponse()
