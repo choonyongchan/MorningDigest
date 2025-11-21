@@ -59,7 +59,7 @@ class Organiser:
         quote = Organiser.get_daily_quote()
         header = Organiser.build_header(content.name, content.sponsor_name, quote)
         sections = [
-            Organiser._rounded_box("", Organiser.build_good_morning(content.summary)),
+            Organiser._rounded_box(f"Good Morning {content.name}", Organiser.build_good_morning(content.summary)),
             Organiser._rounded_box(f"Presented by {content.sponsor_name}", Organiser.build_sponsor(content.sponsor_message)),
             Organiser._rounded_box("Top Headlines", Organiser.build_headlines(content.top_headlines)),
             Organiser._rounded_box("Partnership + Share", Organiser.build_partnership_share(content.partnership_message)),
@@ -134,10 +134,11 @@ class Organiser:
             f"<p class='quote-meta'>— {quote.author}</p>"
             "</div>"
         )
+        name = "" if user_name == "Singapore" else f" for {user_name}"
         return (
             "<div class='digest-header'>\n"
             f"{logo_html}\n"
-            f"<h1>The Morning Digest for {user_name}</h1>\n"
+            f"<h1>The Morning Digest{name}</h1>\n"
             f"{date_html}"
             f"{sponsor_html}\n"
             f"{quote_html}\n"

@@ -49,8 +49,8 @@ class Summariser:
             prompt: str = self.feed_to_str(selected_feeds)
             instructions = (
                 "You are a friendly and personal morning newsletter writer for a Singapore audience. "
-                f"Write 3 short, engaging paragraphs summarising the following items for {user.name}. "
-                f"Be concise, human, and lightly opinionated. Use simple language and a warm tone. Begin with 'Good Morning {user.name}!' "
+                f"Write 3 short, engaging paragraphs summarising the following news items. "
+                f"Be concise, human, and lightly opinionated. Use simple language and a warm tone!' "
             )
             summary = self.invoke_model(instructions, prompt)
             user.summary = summary.strip()
