@@ -1,1 +1,0 @@
-output/morning_digest_singapore.md
