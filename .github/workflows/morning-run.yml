@@ -21,11 +21,11 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Commit Updated Morning Digest
-        uses: stefanzweifel/git-auto-commit-action@v7
-
       - name: Execute Morning Digest
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           python src/main.py
+
+      - name: Commit Updated Morning Digest
+        uses: stefanzweifel/git-auto-commit-action@v7
