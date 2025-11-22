@@ -33,6 +33,7 @@ class Organiser:
     SPONSOR_NAME: str = "Choonyong Chan"
     SPONSOR_MESSAGE: str = "❤️ This edition is made possible by friends of The Morning Digest."
     PARTNERSHIP_MESSAGE: str = "📬 Forward this digest to someone who should wake up informed."
+    EN_CH_TRANSLATION_LINK: str = "https://choonyongchan-github-io.translate.goog/MorningDigest/?_x_tr_sl=en&_x_tr_tl=zh-CN"
 
     @staticmethod
     def build(
@@ -134,6 +135,9 @@ class Organiser:
             f"<p class='quote-meta'>— {quote.author}</p>"
             "</div>"
         )
+        translations_html = (
+            f"<p class='sponsor-line'><a href='{Organiser.EN_CH_TRANSLATION_LINK}'>中文版</a></p>"
+        )
         name = "" if user_name == "Singapore" else f" for {user_name}"
         return (
             "<div class='digest-header'>\n"
@@ -142,6 +146,7 @@ class Organiser:
             f"{date_html}"
             f"{sponsor_html}\n"
             f"{quote_html}\n"
+            f"{translations_html}\n"
             "</div>"
         )
 
