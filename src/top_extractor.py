@@ -9,7 +9,7 @@ from commons import User
 class TopExtractor:
 
     EMBEDDING_MODEL: SentenceTransformer = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
-    TOP_N: int = 5
+    TOP_N: int = 15
 
     @staticmethod
     def embed(texts):
