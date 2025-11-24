@@ -32,7 +32,7 @@ jobs:
       
       - name: Copy Morning Digest to Root
         run: |
-          cp ./output/morning_digest_singapore.md ./morning_digest.md
+          cp ./output/morning_digest_singapore.md ./index.md
 
       - name: Commit Updated Morning Digest
         uses: stefanzweifel/git-auto-commit-action@v7
