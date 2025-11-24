@@ -138,9 +138,11 @@ class Organiser:
             "</div>"
         )
         translations_html = (
-            f"<p class='sponsor-line'><a href='{Organiser.EN_CHINESE_TRANSLATION_LINK}'>中文</a></p>"
-            f"<p class='sponsor-line'><a href='{Organiser.EN_MALAY_TRANSLATION_LINK}'>Bahasa Melayu</a></p>"
-            f"<p class='sponsor-line'><a href='{Organiser.EN_TAMIL_TRANSLATION_LINK}'>தமிழ்</a></p>"
+            f"""<p class='quote-meta'>
+            <a href='{Organiser.EN_CHINESE_TRANSLATION_LINK}'>中文</a> |
+            <a href='{Organiser.EN_MALAY_TRANSLATION_LINK}'>Bahasa Melayu</a> |
+            <a href='{Organiser.EN_TAMIL_TRANSLATION_LINK}'>தமிழ்</a> 
+            </p>"""
         )
         name = "" if user_name == "Singapore" else f" for {user_name}"
         return (
