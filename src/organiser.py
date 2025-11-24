@@ -33,7 +33,9 @@ class Organiser:
     SPONSOR_NAME: str = "Choonyong Chan"
     SPONSOR_MESSAGE: str = "❤️ This edition is made possible by friends of The Morning Digest."
     PARTNERSHIP_MESSAGE: str = "📬 Forward this digest to someone who should wake up informed."
-    EN_CH_TRANSLATION_LINK: str = "https://choonyongchan-github-io.translate.goog/MorningDigest/?_x_tr_sl=en&_x_tr_tl=zh-CN"
+    EN_CHINESE_TRANSLATION_LINK: str = "https://choonyongchan-github-io.translate.goog/MorningDigest/?_x_tr_sl=en&_x_tr_tl=zh-CN"
+    EN_MALAY_TRANSLATION_LINK: str = "https://choonyongchan-github-io.translate.goog/MorningDigest/?_x_tr_sl=en&_x_tr_tl=ms"
+    EN_TAMIL_TRANSLATION_LINK: str = "https://choonyongchan-github-io.translate.goog/MorningDigest/?_x_tr_sl=en&_x_tr_tl=ta"
 
     @staticmethod
     def build(
@@ -136,7 +138,9 @@ class Organiser:
             "</div>"
         )
         translations_html = (
-            f"<p class='sponsor-line'><a href='{Organiser.EN_CH_TRANSLATION_LINK}'>中文版</a></p>"
+            f"<p class='sponsor-line'><a href='{Organiser.EN_CHINESE_TRANSLATION_LINK}'>中文</a></p>"
+            f"<p class='sponsor-line'><a href='{Organiser.EN_MALAY_TRANSLATION_LINK}'>Bahasa Melayu</a></p>"
+            f"<p class='sponsor-line'><a href='{Organiser.EN_TAMIL_TRANSLATION_LINK}'>தமிழ்</a></p>"
         )
         name = "" if user_name == "Singapore" else f" for {user_name}"
         return (
